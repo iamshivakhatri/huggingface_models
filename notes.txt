@@ -1,0 +1,2 @@
+pip uninstall ctransformers --yes
+  CT_METAL=1 pip install ctransformers --no-binary ctransformers
