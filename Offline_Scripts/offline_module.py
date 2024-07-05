@@ -63,9 +63,13 @@ def main():
     #         with st.spinner('Transcribing...'):
     #             result = generate_text_from_audio(model, uploaded_file)
     #             st.write(result)
+
+
+    # Image generation
     st.title("Text to Image")
     st.write("This is a simple text to image generation app using Hugging Face's pipeline API.")
     model_path = "../models/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b"
+    refiner_model_path = "../models/models--stabilityai--stable-diffusion-xl-refiner-1.0/snapshots/5d4cfe854c9a9a87939ff3653551c2b3c99a4356"
     model = load_image_generation_model(model_path)
     prompt = st.text_input("Enter a prompt", value="A cat sitting on a table")
     if st.button("Generate Image"):
