@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summarizer App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Summarizer App</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="pdf">Upload PDF:</label>
+                <input type="file" name="pdf" id="pdf">
+            </div>
+            <div>
+                <label for="youtube_url">YouTube URL:</label>
+                <input type="text" name="youtube_url" id="youtube_url" placeholder="Enter YouTube URL">
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        {% if summary %}
+        <div class="summary">
+            <h2>Summary</h2>
+            <p>{{ summary }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
