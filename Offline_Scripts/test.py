@@ -1,3 +1,10 @@
-from diffusers import DiffusionPipeline
+from ctransformers import GPT2
 
-pipeline = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0")
+# Load the model
+model = GPT2()
+
+# Generate text
+prompt = "Once upon a time"
+generated_text = model.generate(prompt, max_length=50)
+
+print(generated_text)

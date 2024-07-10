@@ -6,6 +6,9 @@ import yt_dlp
 from moviepy.editor import *
 import requests
 
+from youtube_transcript_api import YouTubeTranscriptApi
+
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '../../Flask_Apps/Summarization_App/uploads'
 
@@ -20,22 +23,43 @@ def extract_text_from_pdf(pdf_path):
     return "".join(pages)
 
 
+# def extract_transcript_from_youtube(url):
+#     ydl_opts = {'format': 'bestaudio/best', 'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'wav', 'preferredquality': '192'}]}
+#     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+#         info_dict = ydl.extract_info(url, download=False)
+#         video_id = info_dict.get("id", None)
+#         video_title = info_dict.get('title', None)
+#         video_duration = info_dict.get('duration', None)
+#         transcript = ""
+#         transcript_info = info_dict.get('subtitles', {}).get('en', [])
+#         if transcript_info:
+#             for trans in transcript_info:
+#                 if 'url' in trans:
+#                     transcript_url = trans['url']
+#                     transcript_response = requests.get(transcript_url)
+#                     transcript += transcript_response.text
+#         print("This is transcript", transcript)
+#     return transcript
+
+def get_video_id(youtube_url):
+    # Extract the video ID from the URL
+    if "watch?v=" in youtube_url:
+        return youtube_url.split("watch?v=")[-1]
+    elif "youtu.be/" in youtube_url:
+        return youtube_url.split("youtu.be/")[-1]
+    else:
+        raise ValueError("Invalid YouTube URL format")
+
 def extract_transcript_from_youtube(url):
-    ydl_opts = {'format': 'bestaudio/best', 'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'wav', 'preferredquality': '192'}]}
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info_dict = ydl.extract_info(url, download=False)
-        video_id = info_dict.get("id", None)
-        video_title = info_dict.get('title', None)
-        video_duration = info_dict.get('duration', None)
+    try:
         transcript = ""
-        transcript_info = info_dict.get('subtitles', {}).get('en', [])
-        if transcript_info:
-            for trans in transcript_info:
-                if 'url' in trans:
-                    transcript_url = trans['url']
-                    transcript_response = requests.get(transcript_url)
-                    transcript += transcript_response.text
-        print("This is transcript", transcript)
+        video_id = get_video_id(url)
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+        for entry in transcript_list:
+            transcript = transcript + entry['text'] + " "
+        print("Whole text: ", transcript)
+    except Exception as e:
+        print(f"An error occurred: {e}")
     return transcript
 
 @app.route("/", methods=["GET", "POST"])
