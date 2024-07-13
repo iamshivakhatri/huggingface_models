@@ -2,3 +2,4 @@
 .env
 models
 **/**/uploads
+Offline_Scripts/*.pdf
