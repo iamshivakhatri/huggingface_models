@@ -1,26 +1,6 @@
 import PyPDF2
 
-# def extract_text_from_pdf(pdf_path, txt_path):
-#     # Open the PDF file
-    
-#     with open(pdf_path, 'rb') as file:
-#         reader = PyPDF2.PdfReader(file)
-#         # Create a text file to save the extracted text
-#         with open(txt_path, 'w', encoding='utf-8') as text_file:
-#             # Iterate over each page
-#             for page_num in range(len(reader.pages)):
-#                 print(f"Total number of pages: {len(reader.pages)}")
-#                 print(f"Extracting text from page {page_num + 1}...")
-#                 # Get the page
-#                 page = reader.pages[page_num]
-#                 # Extract text from the page
-#                 text = page.extract_text()
-#                 print(f"Extracted text: {text}")
-#                 if text:  # Ensure the extracted text is not None
-#                     # Write the text to the text file
-#                     text_file.write(text)
-#                     text_file.write('\n')  # Add a newline for readability
-#     print(f"Opening PDF file: {pdf_path}")
+
 
 def extract_text_from_pdf(pdf_path, txt_path):
     print(f"Opening PDF file: {pdf_path}")
@@ -55,3 +35,16 @@ if __name__ == "__main__":
     txt_path = "output_text_file.txt"  # Replace with the desired output text file path
     extract_text_from_pdf(pdf_path, txt_path)
     print(f"Text extracted and saved to {txt_path}")
+
+def extract_text_from_pdf(pdf_path, txt_path):
+
+    with open(pdf_path, 'rb', encoding = 'utf-8') as file:
+        reader = PyPDF2.reader(file)
+        with open(txt_path, 'w', encoding='utf-8') as text_file:
+            for page_num in range(len(reader.pages)):
+                page = reader.pages[page_num]
+                text = page.extract_text()
+                if text:
+                    text_file.write(text)
+                    text_file.write('\n')
+                    

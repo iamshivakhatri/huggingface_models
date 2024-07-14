@@ -57,6 +57,11 @@ def find_most_similar(needle, haystack):
     return sorted(zip(similarity_scores, range(len(haystack))), reverse=True)
  
 def main():
+    SYSTEM_PROMPT = """You are a helpful reading assistant who answers questions 
+    based on snippets of text provided in context. Answer only using the context provided,
+    being as concise as possible. If you're unsure, just say that you don't know.
+    """
+
     filename = "./output_text_file.txt"
     paragraphs = parse_file(filename)
     start = time.perf_counter()
@@ -64,13 +69,25 @@ def main():
     end = time.perf_counter()
 
     prompt = "How to tell a nice story?"
-    print(embeddings)
     prompt_embedding = ollama.embeddings(model="mistral", prompt=prompt)["embedding"]
 
     # Find the most similar paragraph to the prompt
     most_similar_chunks = find_most_similar(prompt_embedding, embeddings)[:5]
-    for item in most_similar_chunks:
-        print(item[0], paragraphs[item[1]])
+    response = ollama.chat(
+        model="mistral",
+        messages=[
+                  {"role": "system", "content": SYSTEM_PROMPT + "\n".join(paragraphs[item[1]] for item in most_similar_chunks)},
+                  {"role": "user", "content": prompt} 
+    
+                  ],
+        stream=False
+    
+    )
+    print("\n\n")
+    print(response["message"]["content"])
+
+    # for item in most_similar_chunks:
+    #     print(item[0], paragraphs[item[1]])
 
     print(f"Time taken: {end-start}")
 
