@@ -3,3 +3,4 @@
 models
 **/**/uploads
 Offline_Scripts/*.pdf
+**/**/*.pdf
